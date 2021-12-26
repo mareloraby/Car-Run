@@ -76,6 +76,10 @@ void setupCamera() {
 Model_3DS model_house;
 Model_3DS model_car;
 Model_3DS coin_model;
+Model_3DS stone_model;
+Model_3DS wheel_model;
+
+
 // Textures
 GLTexture tex_ground;
 
@@ -274,10 +278,10 @@ void renderCoin(float x, float lane) {
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	//Draw Coins
 	glPushMatrix();
-	glTranslatef(x + 5, 0.75 + 0.5, lane);
-	glScalef(0.01, 0.015, 0.01);
+	glTranslatef(x + 5, 1, lane);
+	glScalef(0.01, 0.01, 0.01);
 	glRotatef(coin_rotation_angle, 0, 1, 0);
-	coin_model.Draw();
+	wheel_model.Draw();
 	glPopMatrix();
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
@@ -287,67 +291,20 @@ void renderCoin(float x, float lane) {
 
 void renderObstacle(float x, float lane)
 {
-	glDisable(GL_LIGHTING);	// Disable lighting 
 
-	glColor3f(1, 1, 1);
 
-	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
-
-	glBindTexture(GL_TEXTURE_2D, tex_wood.texture[0]);	// Bind the ground texture
-
+	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+//Draw Coins
 	glPushMatrix();
-
-	glTranslated(x, 1.7, lane);
-	// Top Face
-	glPushMatrix();
-	glTranslated(0, 1, 0);
-	renderFace(Vector3f(0, 1, 0));
+	glTranslatef(x + 5, 0.35, lane);
+	glScalef(3, 3.5, 2);
+	//glRotatef(coin_rotation_angle, 0, 1, 0);
+	stone_model.Draw();
 	glPopMatrix();
-
-	// Bottom Face
-	glPushMatrix();
-	glTranslated(0, -1, 0);
-	renderFace(Vector3f(0, -1, 0));
-	glPopMatrix();
-
-	// Left Face
-	glPushMatrix();
-	glRotated(90, 0, 0, 1);
-	glTranslated(0, 1, 0);
-	renderFace(Vector3f(1, 0, 0));
-	glPopMatrix();
-
-	// Right Face
-	glPushMatrix();
-	glRotated(90, 0, 0, 1);
-	glTranslated(0, -1, 0);
-	renderFace(Vector3f(-1, 0, 0));
-	glPopMatrix();
-
-	// Front Face
-	glPushMatrix();
-	glRotated(90, 0, 0, 1);
-	glRotated(90, 1, 0, 0);
-	glTranslated(0, 1, 0);
-	renderFace(Vector3f(1, 0, 0));
-	glPopMatrix();
-
-
-	// Back Face
-	glPushMatrix();
-	glRotated(90, 0, 0, 1);
-	glRotated(90, 1, 0, 0);
-	glTranslated(0, -1, 0);
-	renderFace(Vector3f(1, 0, 0));
-	glPopMatrix();
-
-
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
-
-	glPopMatrix();
+	
 }
 
 // adds an obstacle behind the skybox
@@ -469,7 +426,7 @@ void myDisplay(void)
 		glTranslatef(-10, score_pos, 14);
 
 	}
-	glColor3f(0, 0, 0);	// Dim the ground texture a bit
+	//glColor3f(0, 0, 0);	// Dim the ground texture a bit
 	sprintf((char *)strScore, "Score = %d/%d", score, maxScore);
 	print(50, 50, (char *)strScore);
 	glPopMatrix();
@@ -490,12 +447,13 @@ void myDisplay(void)
 
 	// Draw Player
 	glPushMatrix();
-
-	glTranslatef(0, 0.5, lanes[player_lane]);
-	glScalef(0.5, 0.5, 0.5);
-	glRotatef(-90.f, 0, 1, 0);
+	glTranslatef(0, 0.9, lanes[player_lane]);
+	glScalef(0.02, 0.02, 0.02);
+	glRotatef(90.f, 1, 0, 0);
+	glRotatef(-90.f, 0, 0, 1);
+	glDisable(GL_LIGHTING);	// Disable lighting 
 	model_car.Draw();
-
+	glEnable(GL_LIGHTING);	// Disable lighting 
 	glPopMatrix();
 
 	//Draw all Coins
@@ -540,8 +498,12 @@ void myDisplay(void)
 void LoadAssets()
 {
 	// Loading Model files
-	model_car.Load("Models/car/ausfb.3ds");
+	//model_car.Load("Models/car/ausfb.3ds");
+	model_car.Load("Models/car3/Car.3ds");
 	coin_model.Load("Models/coin/Coin Block.3ds");
+	stone_model.Load("Models/stone/Stone 2.3DS");
+	wheel_model.Load("Models/wheel/wheel.3DS");
+
 	// Loading texture files
 	if (score <= 2) {
 		tex_ground.Load("Textures/ground.bmp");
