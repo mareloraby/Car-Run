@@ -1,16 +1,16 @@
 ﻿  OpenGLMeshLoader.cpp
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(132,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(145,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(158,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(344,20): warning C4018: '<': signed/unsigned mismatch
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(348,20): warning C4018: '<': signed/unsigned mismatch
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(371,21): warning C4018: '<': signed/unsigned mismatch
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(375,21): warning C4018: '<': signed/unsigned mismatch
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(430,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(524,20): warning C4018: '<': signed/unsigned mismatch
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(542,20): warning C4018: '<': signed/unsigned mismatch
-V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\OpenGLMeshLoader.cpp(555,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\amera\source\repos\Car-Run\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(133,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(146,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(159,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(352,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(356,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(379,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(383,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(438,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(533,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(551,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(564,20): warning C4018: '<': signed/unsigned mismatch
 Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
-  OpenGLMeshLoader.vcxproj -> V:\7th\502 CG\GUC-Surfers-master\GUC-Surfers-master\Debug\OpenGLMeshLoader.exe
+  OpenGLMeshLoader.vcxproj -> C:\Users\amera\Source\Repos\Car-Run\Debug\OpenGLMeshLoader.exe

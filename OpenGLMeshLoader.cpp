@@ -78,11 +78,12 @@ Model_3DS model_car;
 Model_3DS coin_model;
 Model_3DS stone_model;
 Model_3DS wheel_model;
+//Model_3DS palm_model;
+
 
 
 // Textures
 GLTexture tex_ground;
-
 GLTexture tex_surface;
 GLTexture tex_wood;
 
@@ -302,6 +303,13 @@ void renderObstacle(float x, float lane)
 	stone_model.Draw();
 	glPopMatrix();
 
+	//glPushMatrix();
+	//glTranslatef(x + 5, 0.35, 5);
+	//glScalef(3, 3.5, 2);
+	////glRotatef(coin_rotation_angle, 0, 1, 0);
+	//palm_model.Draw();
+	//glPopMatrix();
+
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 	
@@ -503,6 +511,7 @@ void LoadAssets()
 	coin_model.Load("Models/coin/Coin Block.3ds");
 	stone_model.Load("Models/stone/Stone 2.3DS");
 	wheel_model.Load("Models/wheel/wheel.3DS");
+	wheel_model.Load("Models/palm-tree/Palm.3DS");
 
 	// Loading texture files
 	if (score <= 2) {
