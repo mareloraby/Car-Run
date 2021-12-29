@@ -78,7 +78,7 @@ Model_3DS model_car;
 Model_3DS coin_model;
 Model_3DS stone_model;
 Model_3DS wheel_model;
-//Model_3DS palm_model;
+Model_3DS palm_model;
 
 
 
@@ -295,7 +295,7 @@ void renderObstacle(float x, float lane)
 
 
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-//Draw Coins
+    //Draw Coins
 	glPushMatrix();
 	glTranslatef(x + 5, 0.35, lane);
 	glScalef(3, 3.5, 2);
@@ -303,12 +303,21 @@ void renderObstacle(float x, float lane)
 	stone_model.Draw();
 	glPopMatrix();
 
-	//glPushMatrix();
-	//glTranslatef(x + 5, 0.35, 5);
-	//glScalef(3, 3.5, 2);
-	////glRotatef(coin_rotation_angle, 0, 1, 0);
-	//palm_model.Draw();
-	//glPopMatrix();
+	// draw palm trees
+	glPushMatrix();
+	glTranslatef(x + 5, 0.35, lane+ 10);
+	glScalef(0.01, 0.01, 0.01);
+	//glRotatef(coin_rotation_angle, 0, 1, 0);
+	palm_model.Draw();
+	glPopMatrix();
+
+	// draw palm trees
+	glPushMatrix();
+	glTranslatef(x + 5, 0.35, lane - 15);
+	glScalef(0.01, 0.01, 0.01);
+	//glRotatef(coin_rotation_angle, 0, 1, 0);
+	palm_model.Draw();
+	glPopMatrix();
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
@@ -511,7 +520,7 @@ void LoadAssets()
 	coin_model.Load("Models/coin/Coin Block.3ds");
 	stone_model.Load("Models/stone/Stone 2.3DS");
 	wheel_model.Load("Models/wheel/wheel.3DS");
-	wheel_model.Load("Models/palm-tree/Palm.3DS");
+	palm_model.Load("Models/palmTree/palm.3DS");
 
 	// Loading texture files
 	if (score <= 2) {
@@ -645,7 +654,7 @@ void Special(int key, int x, int y) {
 	glutPostRedisplay();
 }
 
-void dropObstacle(int v)
+void dropStone(int v)
 {
 	boolean dropAllowed = random(0, 100) < 70;
 
@@ -654,7 +663,7 @@ void dropObstacle(int v)
 		int lane = random(0, 2);
 		addObstacle(lane);
 	}
-	glutTimerFunc(750, dropObstacle, 0);
+	glutTimerFunc(750, dropStone, 0);
 }
 
 void dropCoin(int v)
@@ -711,7 +720,7 @@ void main(int argc, char** argv)
 
 	glutIdleFunc(anime);
 
-	glutTimerFunc(0, dropObstacle, 0);
+	glutTimerFunc(0, dropStone, 0);
 	glutTimerFunc(0, dropCoin, 0);
 	glutTimerFunc(0, lightAnim, 0);
 

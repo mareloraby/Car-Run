@@ -4,13 +4,13 @@ C:\Users\amera\source\repos\Car-Run\TextureBuilder.h(28,52): warning C4244: 'arg
 C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(133,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
 C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(146,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
 C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(159,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(352,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(356,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(379,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(383,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(438,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(533,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(551,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(564,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(361,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(365,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(388,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(392,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(447,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(542,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(560,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(573,20): warning C4018: '<': signed/unsigned mismatch
 Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
-  OpenGLMeshLoader.vcxproj -> C:\Users\amera\Source\Repos\Car-Run\Debug\OpenGLMeshLoader.exe
+  OpenGLMeshLoader.vcxproj -> C:\Users\amera\source\repos\Car-Run\Debug\OpenGLMeshLoader.exe
