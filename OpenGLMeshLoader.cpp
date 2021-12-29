@@ -1,4 +1,4 @@
-#include "TextureBuilder.h"
+﻿#include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
 #include <glut.h>
@@ -19,14 +19,18 @@ using namespace std;
 
 int lanes[3] = { LEFT_LANE,CENTER_LANE,RIGHT_LANE };
 
+
+
 struct Shape;
 const int SKYBOX_BOUNDARY = 40;
 const float GAME_SPEED = 0.8;
 
+void drawCircle(int x, int y, float r);
+
 int WIDTH = 1280;
 int HEIGHT = 720;
 GLuint tex;
-char title[] = "GUC Surfers";
+char title[] = "Car Finite Run";
 
 float groundTransform = 0;
 
@@ -38,7 +42,9 @@ int score = 0;
 int virtual_score = 0;
 int maxScore = 10;
 int score_pos = -30;
+int lives_pos  = -30;
 int stop = 1;
+int lives = 3;
 vector<Shape> obstacles;
 vector<Shape> coins;
 
@@ -349,7 +355,7 @@ void destroyAtIndex(int index, vector<Shape> &shapes)
 // TODO implement
 void onObstacleCollision()
 {
-	glFlush();
+	/*glFlush();
 	groundTransform = 0;
 	score = 0;
 	if (virtual_score > 10) {
@@ -365,7 +371,15 @@ void onObstacleCollision()
 	for (int i = 0; i < coins.size(); i++)
 	{
 		coins[i].x -= 200;
+	}*/
+
+	lives--;
+	if (lives == 0)
+	{
+		//if lives are equal to zero 
+		glFlush();
 	}
+
 }
 
 void onCoinCollision(int i)
@@ -411,6 +425,8 @@ int random(int lower, int upper)
 //=======================================================================
 // Display Function
 //=======================================================================
+
+
 void myDisplay(void)
 {
 
@@ -427,7 +443,9 @@ void myDisplay(void)
 
 	// Display Score
 	char* strScore[20];
+	char* strLives[20];
 
+	// score display
 	glPushMatrix();
 	if (player_lane == 0)
 	{
@@ -443,10 +461,45 @@ void myDisplay(void)
 		glTranslatef(-10, score_pos, 14);
 
 	}
+
 	//glColor3f(0, 0, 0);	// Dim the ground texture a bit
+	
 	sprintf((char *)strScore, "Score = %d/%d", score, maxScore);
 	print(50, 50, (char *)strScore);
 	glPopMatrix();
+
+	// lives display
+	glPushMatrix();
+	if (player_lane == 0)
+	{
+		glTranslatef(-10, lives_pos, -20);
+	}
+	else if (player_lane == 1)
+	{
+
+		glTranslatef(-10, lives_pos, -18);
+
+	}
+	else {
+		glTranslatef(-10, lives_pos, -16);
+
+	}
+	//glColor3f(0, 0, 0);	// Dim the ground texture a bit
+	
+	int k = 0;
+	char livesString[] = "Lives = %d/%d";
+	sprintf((char*)strLives, livesString,lives,3);
+	print(50, 50, (char*)strLives);
+	/*for (int i = 0; i < lives; i++)
+	{
+		glTranslatef(-10, lives_pos, -16+k);
+		print(60, 50, "1");
+		k += 5;
+	}*/
+
+	
+	glPopMatrix();
+
 
 	// Display Level
 
@@ -509,6 +562,14 @@ void myDisplay(void)
 	glFlush();
 }
 
+void drawCircle(int x, int y, float r) {
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	GLUquadric* quadObj = gluNewQuadric();
+	gluDisk(quadObj, 0, r, 50, 50);
+	glPopMatrix();
+}
+
 //=======================================================================
 // Assets Loading Function
 //=======================================================================
@@ -538,56 +599,60 @@ void LoadAssets()
 //=======================================================================
 void anime()
 {
-	coin_rotation_angle += 5 * stop;
-	for (int i = 0; i < obstacles.size(); i++)
+	// as long as there are lives 
+	if (lives != 0)
 	{
-		obstacles[i].x -= GAME_SPEED * stop;
-
-		// If player collided with obstacle
-		if (obstacles[i].lane == player_lane &&
-			obstacles[i].x <= 1 && obstacles[i].x >= 0)
+		coin_rotation_angle += 5 * stop;
+		for (int i = 0; i < obstacles.size(); i++)
 		{
-			onObstacleCollision();
+			obstacles[i].x -= GAME_SPEED * stop;
+
+			// If player collided with obstacle
+			if (obstacles[i].lane == player_lane &&
+				obstacles[i].x <= 1 && obstacles[i].x >= 0)
+			{
+				onObstacleCollision();
+			}
+
+			// If the obstacle is way behind the player
+			if (obstacles[i].x < -20)
+				destroyAtIndex(i--, obstacles);
 		}
 
-		// If the obstacle is way behind the player
-		if (obstacles[i].x < -20)
-			destroyAtIndex(i--, obstacles);
-	}
 
 
-
-	for (int i = 0; i < coins.size(); i++)
-	{
-		coins[i].x -= GAME_SPEED * stop;
-
-		// If player collided with coin
-		if (coins[i].lane == player_lane &&
-			coins[i].x <= 0.9 && coins[i].x >= 0)
+		for (int i = 0; i < coins.size(); i++)
 		{
-			onCoinCollision(i);
-			destroyAtIndex(i--, coins);
+			coins[i].x -= GAME_SPEED * stop;
+
+			// If player collided with coin
+			if (coins[i].lane == player_lane &&
+				coins[i].x <= 0.9 && coins[i].x >= 0)
+			{
+				onCoinCollision(i);
+				destroyAtIndex(i--, coins);
+			}
 		}
+
+		for (int i = 0; i < coins.size(); i++)
+		{
+			// If the coin is way behind the player
+			if (coins[i].x < -20 && coins.size() > 0)
+				destroyAtIndex(i--, coins);
+		}
+
+		groundTransform -= GAME_SPEED * stop;
+
+		for (int i = 0; i < 1e7; i++);
+		glutPostRedisplay();
+
 	}
-
-	for (int i = 0; i < coins.size(); i++)
-	{
-		// If the coin is way behind the player
-		if (coins[i].x < -20 && coins.size() > 0)
-			destroyAtIndex(i--, coins);
-	}
-
-	groundTransform -= GAME_SPEED * stop;
-
-	for (int i = 0; i < 1e7 ; i++);
-	glutPostRedisplay();
+	
 }
-
-
 
 void Keyboard(unsigned char key, int x, int y) {
 	float d = 0.8;
-	float x_truck_cam = 2;
+	float x_car_cam = 2;
 
 	switch (key) {
 	case 'w':
@@ -600,14 +665,14 @@ void Keyboard(unsigned char key, int x, int y) {
 		if (player_lane < 2)
 		{
 			player_lane++;
-			camera.moveX(-x_truck_cam);
+			camera.moveX(-x_car_cam);
 		}
 		break;
 	case 'a':
 		if (player_lane > 0)
 		{
 			player_lane--;
-			camera.moveX(x_truck_cam);
+			camera.moveX(x_car_cam);
 		}
 		break;
 	case 'q':
@@ -619,11 +684,13 @@ void Keyboard(unsigned char key, int x, int y) {
 
 	case 't':
 		score_pos = -48.5;
+		lives_pos = -48.5;
 		camera = Camera(-8.0f, 7.0f, lanes[player_lane], -1.0f, 2.7f, lanes[player_lane], 0.0f, 1.0f, 0.0f);
 		break;
 
 	case 'f':
 		score_pos = -30;
+		lives_pos = -30;
 		camera = Camera(0.5f, 2.0f, lanes[player_lane], 1.0f, 2.0f, lanes[player_lane], 0.0f, 1.0f, 0.0f);;
 		break;
 	case GLUT_KEY_ESCAPE:
@@ -633,6 +700,7 @@ void Keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 
+// camera controls
 void Special(int key, int x, int y) {
 	float a = 1.0;
 

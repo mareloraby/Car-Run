@@ -1,16 +1,15 @@
 ﻿  OpenGLMeshLoader.cpp
 C:\Users\amera\source\repos\Car-Run\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 C:\Users\amera\source\repos\Car-Run\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(133,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(146,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(159,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(361,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(365,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(388,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(392,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(447,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(542,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(560,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(573,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(139,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(152,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(165,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(402,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(406,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(467,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(491,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(606,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(624,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\amera\source\repos\Car-Run\OpenGLMeshLoader.cpp(637,21): warning C4018: '<': signed/unsigned mismatch
 Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
   OpenGLMeshLoader.vcxproj -> C:\Users\amera\source\repos\Car-Run\Debug\OpenGLMeshLoader.exe
