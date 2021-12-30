@@ -41,6 +41,7 @@ int score_pos = -30;
 int stop = 1;
 vector<Shape> obstacles;
 vector<Shape> coins;
+bool level2 = false;
 
 
 struct Shape {
@@ -79,7 +80,7 @@ Model_3DS coin_model;
 Model_3DS stone_model;
 Model_3DS wheel_model;
 Model_3DS palm_model;
-
+Model_3DS house_model;
 
 
 // Textures
@@ -109,11 +110,6 @@ void print(int x, int y, char *string)
 //=======================================================================
 void InitLightSource()
 {
-
-
-
-
-
 
 
 	glEnable(GL_LIGHTING);
@@ -199,11 +195,8 @@ void InitMaterial()
 void RenderGround()
 {
 	glDisable(GL_LIGHTING);	// Disable lighting 
-
 	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
-
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
-
 	glBindTexture(GL_TEXTURE_2D, tex_ground.texture[0]);	// Bind the ground texture
 
 	glPushMatrix();
@@ -295,7 +288,8 @@ void renderObstacle(float x, float lane)
 
 
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-    //Draw Coins
+   
+	 //Draw Coins
 	glPushMatrix();
 	glTranslatef(x + 5, 0.35, lane);
 	glScalef(3, 3.5, 2);
@@ -303,21 +297,43 @@ void renderObstacle(float x, float lane)
 	stone_model.Draw();
 	glPopMatrix();
 
-	// draw palm trees
-	glPushMatrix();
-	glTranslatef(x + 5, 0.35, lane+ 10);
-	glScalef(0.01, 0.01, 0.01);
-	//glRotatef(coin_rotation_angle, 0, 1, 0);
-	palm_model.Draw();
-	glPopMatrix();
 
-	// draw palm trees
-	glPushMatrix();
-	glTranslatef(x + 5, 0.35, lane - 15);
-	glScalef(0.01, 0.01, 0.01);
-	//glRotatef(coin_rotation_angle, 0, 1, 0);
-	palm_model.Draw();
-	glPopMatrix();
+	if (!level2) {
+		// draw palm trees
+		glPushMatrix();
+		glTranslatef(x + 5, 0.35, lane + 10);
+		glScalef(0.01, 0.01, 0.01);
+		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		palm_model.Draw();
+		glPopMatrix();
+
+		// draw palm trees
+		glPushMatrix();
+		glTranslatef(x + 5, 0.35, lane - 15);
+		glScalef(0.01, 0.01, 0.01);
+		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		palm_model.Draw();
+		glPopMatrix();
+	}
+	else {
+	
+		// draw palm trees
+		glPushMatrix();
+		glTranslatef(x + 5, 3.7, lane + 15);
+		glScalef(0.0009, 0.0009, 0.0009);
+		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		house_model.Draw();
+		glPopMatrix();
+
+		// draw palm trees
+		glPushMatrix();
+		glTranslatef(x + 5, 3.7, lane - 20);
+		glScalef(0.0009, 0.0009, 0.0009);
+		glRotatef(180, 0, 1, 0);
+		house_model.Draw();
+		glPopMatrix();
+	
+	}
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
@@ -376,12 +392,11 @@ void onCoinCollision(int i)
 	virtual_score++;
 	score++;
 
-	if (virtual_score == 10) {
+	if (virtual_score == 1) {
 		glutSwapBuffers();
-		tex_ground.Load("Textures/wood.bmp");
-		tex_surface.Load("Textures/ground0.bmp");
-		tex_wood.Load("Textures/marple.bmp");
-
+		//tex_ground.Load("Textures/wood.bmp");
+		tex_surface.Load("Textures/grasstext.bmp");
+		level2 = true;
 
 		score = 0;
 		maxScore = 20;
@@ -521,15 +536,14 @@ void LoadAssets()
 	stone_model.Load("Models/stone/Stone 2.3DS");
 	wheel_model.Load("Models/wheel/wheel.3DS");
 	palm_model.Load("Models/palmTree/palm.3DS");
+	house_model.Load("Models/House9/House/House.3DS");
+
 
 	// Loading texture files
-	if (score <= 2) {
-		tex_ground.Load("Textures/ground.bmp");
-	}
+
+	tex_ground.Load("Textures/ground.bmp");
 	tex_surface.Load("Textures/surface.bmp");
-
 	tex_wood.Load("Textures/wall.bmp");
-
 	loadBMP(&tex, "Textures/blu-sky-3.bmp", true);
 }
 
@@ -665,6 +679,8 @@ void dropStone(int v)
 	}
 	glutTimerFunc(750, dropStone, 0);
 }
+
+
 
 void dropCoin(int v)
 {
