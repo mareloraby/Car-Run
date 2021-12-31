@@ -31,7 +31,7 @@ char title[] = "Car Finite Run";
 
 float groundTransform = 0;
 
-int coin_rotation_angle;
+int wheel_rotation_angle;
 bool l0,l1,l2;
 int light = 0;
 int player_lane = 1;
@@ -46,7 +46,7 @@ bool gainedPowerUp = false;
 int timePowerFail = 0;
 
 vector<Shape> obstacles;
-vector<Shape> coins;
+vector<Shape> wheels;
 
 
 struct Shape {
@@ -228,13 +228,9 @@ void RenderGround()
 void RenderSurface()
 {
 	glDisable(GL_LIGHTING);	// Disable lighting
-
 	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
-
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
-
 	glBindTexture(GL_TEXTURE_2D, tex_surface.texture[0]);	// Bind the ground texture
-
 	glPushMatrix();
 	glBegin(GL_QUADS);
 	glNormal3f(0, 1, 0);	// Set quad normal direction.
@@ -248,21 +244,19 @@ void RenderSurface()
 	glVertex3f(-200, 0, 200);
 	glEnd();
 	glPopMatrix();
-
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
 
-void renderCoin(float x, float lane) {
+void renderWheel(float x, float lane) {
 
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-	//Draw Coins
+	//Draw Wheels
 	glPushMatrix();
 	glTranslatef(x + 5, 1, lane);
 	glScalef(0.01, 0.01, 0.01);
-	glRotatef(coin_rotation_angle, 0, 1, 0);
+	glRotatef(wheel_rotation_angle, 0, 1, 0);
 	wheel_model.Draw();
 	glPopMatrix();
 
@@ -280,11 +274,11 @@ void renderObstacle(float x, float lane)
 
 
 	if (!level2) {
-		//Draw Coins
+		//Draw Wheels
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane);
 		glScalef(3, 3.5, 2);
-		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		stone_model.Draw();
 		glPopMatrix();
 
@@ -293,7 +287,7 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane + 10);
 		glScalef(0.01, 0.01, 0.01);
-		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		palm_model.Draw();
 		glPopMatrix();
 
@@ -301,7 +295,7 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane - 15);
 		glScalef(0.01, 0.01, 0.01);
-		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		palm_model.Draw();
 		glPopMatrix();
 	}
@@ -318,7 +312,7 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 3.7, lane + 15);
 		glScalef(0.0009, 0.0009, 0.0009);
-		//glRotatef(coin_rotation_angle, 0, 1, 0);
+		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		house_model.Draw();
 		glPopMatrix();
 
@@ -341,12 +335,10 @@ void addObstacle(int lane)
 	obstacles.push_back(Shape(RESPAWN_POSITION, lane));
 }
 
-void addCoin(int lane)
+void addWheel(int lane)
 {
-	coins.push_back(Shape(RESPAWN_POSITION, lane));
+	wheels.push_back(Shape(RESPAWN_POSITION, lane));
 }
-
-
 
 void destroyAtIndex(int index, vector<Shape> &shapes)
 {
@@ -370,7 +362,7 @@ void onObstacleCollision()
 
 }
 
-void onCoinCollision(int i)
+void onWheelCollision(int i)
 {
 	glFlush();
 	glutSwapBuffers();
@@ -485,10 +477,10 @@ void myDisplay(void)
 	glEnable(GL_LIGHTING);	// Disable lighting 
 	glPopMatrix();
 
-	//Draw all Coins
-	for (unsigned i = 0; i < coins.size(); i++)
+	//Draw all Wheels
+	for (unsigned i = 0; i < wheels.size(); i++)
 	{
-		renderCoin(coins[i].x, lanes[coins[i].lane]);
+		renderWheel(wheels[i].x, lanes[wheels[i].lane]);
 	}
 
 
@@ -510,9 +502,9 @@ void myDisplay(void)
 		{
 			obstacles[i].x -= 200;
 		}
-		for (int i = 0; i < coins.size(); i++)
+		for (int i = 0; i < wheels.size(); i++)
 		{
-			coins[i].x -= 200;
+			wheels[i].x -= 200;
 		}
 	}
 	else if (timeElapsed == 60 && lives != 0) {
@@ -576,7 +568,7 @@ void anime()
 	// as long as there are lives 
 	if (lives != 0)
 	{
-		coin_rotation_angle += 5 * stop;
+		wheel_rotation_angle += 5 * stop;
 		for (int i = 0; i < obstacles.size(); i++)
 		{
 			obstacles[i].x -= GAME_SPEED * stop;
@@ -595,24 +587,24 @@ void anime()
 
 
 
-		for (int i = 0; i < coins.size(); i++)
+		for (int i = 0; i < wheels.size(); i++)
 		{
-			coins[i].x -= GAME_SPEED * stop;
+			wheels[i].x -= GAME_SPEED * stop;
 
-			// If player collided with coin
-			if (coins[i].lane == player_lane &&
-				coins[i].x <= 0.9 && coins[i].x >= 0)
+			// If player collided with wheel
+			if (wheels[i].lane == player_lane &&
+				wheels[i].x <= 0.9 && wheels[i].x >= 0)
 			{
-				onCoinCollision(i);
-				destroyAtIndex(i--, coins);
+				onWheelCollision(i);
+				destroyAtIndex(i--, wheels);
 			}
 		}
 
-		for (int i = 0; i < coins.size(); i++)
+		for (int i = 0; i < wheels.size(); i++)
 		{
-			// If the coin is way behind the player
-			if (coins[i].x < -20 && coins.size() > 0)
-				destroyAtIndex(i--, coins);
+			// If the wheel is way behind the player
+			if (wheels[i].x < -20 && wheels.size() > 0)
+				destroyAtIndex(i--, wheels);
 		}
 
 		groundTransform -= GAME_SPEED * stop;
@@ -708,16 +700,16 @@ void dropStone(int v)
 	glutTimerFunc(750, dropStone, 0);
 }
 
-void dropCoin(int v)
+void dropWheel(int v)
 {
 	boolean dropAllowed = random(0, 100) < 70;
 
 	if (dropAllowed)
 	{
 		int lane = random(0, 2);
-		addCoin(lane);
+		addWheel(lane);
 	}
-	glutTimerFunc(4000, dropCoin, 0);
+	glutTimerFunc(4000, dropWheel, 0);
 }
 
 void lightAnim(int time)
@@ -764,19 +756,13 @@ void main(int argc, char** argv)
 	glutInit(&argc, argv);
 
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-
 	glutInitWindowSize(WIDTH, HEIGHT);
-
 	glutInitWindowPosition(100, 150);
-
 	glutCreateWindow(title);
-
 	glutDisplayFunc(myDisplay);
-
 	glutIdleFunc(anime);
-
 	glutTimerFunc(0, dropStone, 0);
-	glutTimerFunc(0, dropCoin, 0);
+	glutTimerFunc(0, dropWheel, 0);
 	glutTimerFunc(0, lightAnim, 0);
 	glutTimerFunc(0, Timers, 0);
 
