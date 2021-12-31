@@ -19,8 +19,6 @@ using namespace std;
 
 int lanes[3] = { LEFT_LANE,CENTER_LANE,RIGHT_LANE };
 
-
-
 struct Shape;
 const int SKYBOX_BOUNDARY = 40;
 const float GAME_SPEED = 0.8;
@@ -44,6 +42,9 @@ int score_pos = -30;
 int lives_pos  = -30;
 int stop = 1;
 int lives = 3;
+bool gainedPowerUp = false;
+int timePowerFail = 0;
+
 vector<Shape> obstacles;
 vector<Shape> coins;
 
@@ -378,9 +379,9 @@ void destroyAtIndex(int index, vector<Shape> &shapes)
 
 void onObstacleCollision()
 {
-	
-
-	lives--;
+	if (!gainedPowerUp) {
+		lives--;
+	}
 	if (lives == 0)
 	{
 		//if lives are equal to zero 
@@ -389,15 +390,14 @@ void onObstacleCollision()
 
 }
 
-bool gainedPowerUp = false;
 void onCoinCollision(int i)
 {
 	glFlush();
 	glutSwapBuffers();
 	gainedPowerUp = true;
+	timePowerFail = timeElapsed + 5;
 
-	//give powerup
-
+	
 }
 
 int random(int lower, int upper)
@@ -521,7 +521,7 @@ void myDisplay(void)
 
 	
 
-	if (timeElapsed == 10 && lives != 0) { //go to level 2
+	if (timeElapsed == 20 && lives != 0) { //go to level 2
 		glutSwapBuffers();
 
 		tex_surface.Load("Textures/grasstext.bmp");
@@ -529,11 +529,11 @@ void myDisplay(void)
 
 		for (int i = 0; i < obstacles.size(); i++)
 		{
-			obstacles[i].x -= 150;
+			obstacles[i].x -= 200;
 		}
 		for (int i = 0; i < coins.size(); i++)
 		{
-			coins[i].x -= 150;
+			coins[i].x -= 200;
 		}
 	}
 	else if (timeElapsed == 60 && lives != 0) {
@@ -775,7 +775,13 @@ void Timers(int value) {
 	timeElapsed +=1;
 	cout << "" << endl;
 
-	cout << timeElapsed << endl;
+	if (timeElapsed > timePowerFail) {
+		
+		gainedPowerUp = false;
+
+	}
+
+	//cout << timeElapsed << endl;
 	glutTimerFunc(900, Timers, 0);
 	glutPostRedisplay();
 }
