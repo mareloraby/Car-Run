@@ -1,15 +1,6 @@
 ﻿  OpenGLMeshLoader.cpp
-C:\Users\marya\source\repos\Car-Run\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-C:\Users\marya\source\repos\Car-Run\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(134,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(147,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(160,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(509,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(513,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(428,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(451,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(580,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(598,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marya\source\repos\Car-Run\OpenGLMeshLoader.cpp(611,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marya\source\repos\playground\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\marya\source\repos\playground\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\marya\source\repos\playground\OpenGLMeshLoader.cpp(102,46): warning C4838: conversion from 'bool' to 'GLfloat' requires a narrowing conversion
 Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
-  OpenGLMeshLoader.vcxproj -> C:\Users\marya\Source\Repos\Car-Run\Debug\OpenGLMeshLoader.exe
+  OpenGLMeshLoader.vcxproj -> C:\Users\marya\Source\Repos\playground\Debug\OpenGLMeshLoader.exe
