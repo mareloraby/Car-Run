@@ -569,18 +569,13 @@ void myDisplay(void)
 void LoadAssets()
 {
 	// Loading Model files
-	//model_car.Load("Models/car/ausfb.3ds");
 	model_car.Load("Models/car3/Car.3ds");
-	
 	stone_model.Load("Models/stone/Stone 2.3DS");
-
 	wheel_model.Load("Models/wheel/wheel.3DS");
 	palm_model.Load("Models/palmTree/palm.3DS");
 	house_model.Load("Models/House9/House/House.3DS");
 	tree_model.Load("Models/tree1/tree.3DS");
 	box_model.Load("Models/waste/Bin Polymer trash bin BM-5000 N080818.3DS");
-
-
 
 	// Loading texture files
 	if (score <= 2) {
@@ -772,13 +767,11 @@ void lightAnim(int time)
 void Timers(int value) {
 
 	timeElapsed +=1;
-
 	if (timeElapsed > timePowerFail) {
 		
 		gainedPowerUp = false;
 
 	}
-
 	//cout << timeElapsed << endl;
 	glutTimerFunc(900, Timers, 0);
 	glutPostRedisplay();
