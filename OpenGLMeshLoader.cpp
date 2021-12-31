@@ -81,7 +81,6 @@ void setupCamera() {
 // Model Variables
 Model_3DS model_house;
 Model_3DS model_car;
-Model_3DS coin_model;
 Model_3DS stone_model;
 Model_3DS wheel_model;
 Model_3DS palm_model;
@@ -572,7 +571,7 @@ void LoadAssets()
 	// Loading Model files
 	//model_car.Load("Models/car/ausfb.3ds");
 	model_car.Load("Models/car3/Car.3ds");
-	coin_model.Load("Models/coin/Coin Block.3ds");
+	
 	stone_model.Load("Models/stone/Stone 2.3DS");
 
 	wheel_model.Load("Models/wheel/wheel.3DS");
@@ -773,7 +772,6 @@ void lightAnim(int time)
 void Timers(int value) {
 
 	timeElapsed +=1;
-	cout << "" << endl;
 
 	if (timeElapsed > timePowerFail) {
 		
