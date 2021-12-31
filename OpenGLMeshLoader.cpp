@@ -255,25 +255,6 @@ void RenderSurface()
 }
 
 
-
-// Draws a unit quad
-void renderFace(Vector3f normal)
-{
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glNormal3f(normal.x, normal.y, normal.z);	// Set quad normal direction.
-	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
-	glVertex3f(-1, 0, -1);
-	glTexCoord2f(1, 0);
-	glVertex3f(1, 0, -1);
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 0, 1);
-	glTexCoord2f(0, 1);
-	glVertex3f(-1, 0, 1);
-	glEnd();
-	glPopMatrix();
-}
-
 void renderCoin(float x, float lane) {
 
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
@@ -481,7 +462,6 @@ void myDisplay(void)
 
 
 	// Display Level
-
 	glPushMatrix();
 	glTranslated(groundTransform * 0.2, 0, 0);
 	RenderSurface();
@@ -737,7 +717,7 @@ void dropCoin(int v)
 		int lane = random(0, 2);
 		addCoin(lane);
 	}
-	glutTimerFunc(2000, dropCoin, 0);
+	glutTimerFunc(4000, dropCoin, 0);
 }
 
 void lightAnim(int time)
@@ -801,11 +781,8 @@ void main(int argc, char** argv)
 	glutTimerFunc(0, Timers, 0);
 
 
-
 	glutKeyboardFunc(Keyboard);
-
 	glutSpecialFunc(Special);
-
 	LoadAssets();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
