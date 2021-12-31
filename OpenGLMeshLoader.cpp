@@ -25,7 +25,6 @@ struct Shape;
 const int SKYBOX_BOUNDARY = 40;
 const float GAME_SPEED = 0.8;
 
-void drawCircle(int x, int y, float r);
 
 int WIDTH = 1280;
 int HEIGHT = 720;
@@ -91,7 +90,7 @@ Model_3DS box_model;
 
 
 bool level2 = false;
-
+int timeElapsed = -1;
 // Textures
 GLTexture tex_ground;
 GLTexture tex_surface;
@@ -110,7 +109,7 @@ void print(int x, int y, char *string)
 	//loop to display character by character
 	for (i = 0; i < len; i++)
 	{
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
 	}
 }
 
@@ -377,26 +376,9 @@ void destroyAtIndex(int index, vector<Shape> &shapes)
 	shapes.pop_back();
 }
 
-// TODO implement
 void onObstacleCollision()
 {
-	/*glFlush();
-	groundTransform = 0;
-	score = 0;
-	if (virtual_score > 10) {
-		virtual_score = 10;
-	}
-	else {
-		virtual_score = 0;
-	}
-	for (int i = 0; i < obstacles.size(); i++)
-	{
-		obstacles[i].x -= 200;
-	}
-	for (int i = 0; i < coins.size(); i++)
-	{
-		coins[i].x -= 200;
-	}*/
+	
 
 	lives--;
 	if (lives == 0)
@@ -407,39 +389,15 @@ void onObstacleCollision()
 
 }
 
+bool gainedPowerUp = false;
 void onCoinCollision(int i)
 {
 	glFlush();
 	glutSwapBuffers();
+	gainedPowerUp = true;
 
-	virtual_score++;
-	score++;
+	//give powerup
 
-	if (virtual_score == 1) {
-		glutSwapBuffers();
-	
-		tex_surface.Load("Textures/grasstext.bmp");
-		level2 = true;
-	
-
-		score = 0;
-		maxScore = 20;
-		for (int i = 0; i < obstacles.size(); i++)
-		{
-			obstacles[i].x -= 200;
-		}
-		for (int i = 0; i < coins.size(); i++)
-		{
-			coins[i].x -= 200;
-		}
-	}
-
-	else if (virtual_score == 30) {
-
-		stop = 0;
-		exit(EXIT_SUCCESS);
-
-	}
 }
 
 int random(int lower, int upper)
@@ -487,9 +445,7 @@ void myDisplay(void)
 
 	}
 
-	//glColor3f(0, 0, 0);	// Dim the ground texture a bit
-	
-	sprintf((char *)strScore, "Score = %d/%d", score, maxScore);
+	sprintf((char *)strScore, "Score : %d", timeElapsed);
 	print(50, 50, (char *)strScore);
 	glPopMatrix();
 
@@ -509,7 +465,6 @@ void myDisplay(void)
 		glTranslatef(-10, lives_pos, -16);
 
 	}
-	//glColor3f(0, 0, 0);	// Dim the ground texture a bit
 	
 	int k = 0;
 	char livesString[] = "Lives = %d/%d";
@@ -564,6 +519,30 @@ void myDisplay(void)
 		renderObstacle(obstacles[i].x, lanes[obstacles[i].lane]);
 	}
 
+	
+
+	if (timeElapsed == 10 && lives != 0) { //go to level 2
+		glutSwapBuffers();
+
+		tex_surface.Load("Textures/grasstext.bmp");
+		level2 = true;
+
+		for (int i = 0; i < obstacles.size(); i++)
+		{
+			obstacles[i].x -= 150;
+		}
+		for (int i = 0; i < coins.size(); i++)
+		{
+			coins[i].x -= 150;
+		}
+	}
+	else if (timeElapsed == 60 && lives != 0) {
+
+		stop = 0;
+		exit(EXIT_SUCCESS);
+
+	}
+
 	//sky box4
 	glDisable(GL_LIGHTING);	// Disable lighting 
 	glPushMatrix();
@@ -582,17 +561,7 @@ void myDisplay(void)
 
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 
-
-	//glutSwapBuffers();
 	glFlush();
-}
-
-void drawCircle(int x, int y, float r) {
-	glPushMatrix();
-	glTranslatef(x, y, 0);
-	GLUquadric* quadObj = gluNewQuadric();
-	gluDisk(quadObj, 0, r, 50, 50);
-	glPopMatrix();
 }
 
 //=======================================================================
@@ -800,6 +769,16 @@ void lightAnim(int time)
 	glutTimerFunc(1500, lightAnim, 0);
 }
 
+
+void Timers(int value) {
+
+	timeElapsed +=1;
+	cout << "" << endl;
+
+	cout << timeElapsed << endl;
+	glutTimerFunc(900, Timers, 0);
+	glutPostRedisplay();
+}
 //=======================================================================
 // Main Function
 //=======================================================================
@@ -822,6 +801,8 @@ void main(int argc, char** argv)
 	glutTimerFunc(0, dropStone, 0);
 	glutTimerFunc(0, dropCoin, 0);
 	glutTimerFunc(0, lightAnim, 0);
+	glutTimerFunc(0, Timers, 0);
+
 
 
 	glutKeyboardFunc(Keyboard);
