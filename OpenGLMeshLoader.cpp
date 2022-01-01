@@ -107,6 +107,10 @@ void print(int x, int y, char *string)
 {
 	int len, i;
 	glColor3f(0, 0, 0);	
+	if (gameWon) {
+		glColor3f(1, 1, 1);
+
+	}
 
 	//set the position of the text in the window using the x and y coordinates
 	glRasterPos2f(x, y);
@@ -359,7 +363,8 @@ void onObstacleCollision()
 	if (lives == 0)
 	{
 		//if lives are equal to zero 
-		gameLost = 1;
+		gameLost = true;
+		//prnt game over
 		glFlush();
 	}
 
@@ -401,6 +406,7 @@ void myDisplay(void)
 	// Display Score
 	char* strScore[20];
 	char* strLives[20];
+	char* gameLostStr[20];
 
 
 	// score display
@@ -457,9 +463,41 @@ void myDisplay(void)
 		print(60, 50, "1");
 		k += 5;
 	}*/
-
-	
 	glPopMatrix();
+
+
+	glPushMatrix();
+	if (player_lane == 0)
+	{
+		glTranslatef(-10, lives_pos, -3);
+	}
+	else if (player_lane == 1)
+	{
+
+		glTranslatef(-10, lives_pos, -1);
+
+	}
+	else {
+		glTranslatef(-10, lives_pos, 1);
+
+	}
+
+	if (gameLost) {
+		glDisable(GL_LIGHTING);	// Disable lighting 
+		sprintf((char*)gameLostStr, "Game Over");
+		print(50, 50, (char*)gameLostStr);
+		glEnable(GL_LIGHTING);
+	}
+	if (gameWon) {
+		glDisable(GL_LIGHTING);	// Disable lighting 
+		sprintf((char*)gameLostStr, "You Won!!");
+		print(50, 50, (char*)gameLostStr);
+		glEnable(GL_LIGHTING);
+	}
+
+
+	glPopMatrix();
+
 
 
 	// Display Level
@@ -519,7 +557,8 @@ void myDisplay(void)
 	else if (timeElapsed == (level1time + level2time) && lives != 0) {
 
 		stop = 0;
-		exit(EXIT_SUCCESS);
+		gameWon = true;
+		//exit(EXIT_SUCCESS);
 
 	}
 
@@ -559,9 +598,9 @@ void anim()
 
 {
 
-	if (!gameLost || !gameWon) {
+	if ( !gameLost && !gameWon) {
 		score += 1;
-	}
+	
 	//light anim
 
 	if (timeElapsed == level1time/5) {
@@ -600,11 +639,7 @@ void anim()
 		if (lposz > -5) lposz = lposz - 0.005;
 	
 	}
-
-
-	// as long as there are lives 
-	if (lives != 0)
-	{
+	
 		wheel_rotation_angle += 5 * stop;
 		for (int i = 0; i < obstacles.size(); i++)
 		{
