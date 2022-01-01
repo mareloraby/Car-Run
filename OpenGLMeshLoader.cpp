@@ -354,7 +354,7 @@ void onObstacleCollision()
 		}
 
 		lives--;
-		score = score - 3;
+		score = score - 10;
 	}
 	if (lives == 0)
 	{
@@ -556,7 +556,12 @@ void LoadAssets()
 // Animation Function
 //=======================================================================
 void anim()
+
 {
+
+	if (!gameLost || !gameWon) {
+		score += 1;
+	}
 	//light anim
 
 	if (timeElapsed == level1time/5) {
@@ -573,7 +578,7 @@ void anim()
 
 	if (cueRedSunset) {
 		if (lposx > 0.5) lposx = lposx - 0.0003;
-		if(lambientr < 0.3) lambientr= lambientr + 0.001;
+		if(lambientr < 0.25) lambientr= lambientr + 0.001;
 		else {
 			cueRedSunset = false;
 		}
@@ -589,7 +594,7 @@ void anim()
 
 	if (cueDarkness) {
 		if (lambientb < 0.2) lambientb = lambientb + 0.001;
-		if (lambientr > 0.05) lambientr = lambientr - 0.003;
+		if (lambientr > 0.05) lambientr = lambientr - 0.001;
 		lposx = lposx - 0.005;
 		if (lposy > -4) lposy = lposy - 0.005;	
 		if (lposz > -5) lposz = lposz - 0.005;
@@ -746,9 +751,7 @@ void dropWheel(int v)
 void Timers(int value) {
 
 	timeElapsed +=1;
-	if (!gameLost || !gameWon) {
-		score += 1;
-	}
+
 	if (timeElapsed > timePowerFail) {
 		
 		gainedPowerUp = false;
