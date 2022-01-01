@@ -128,7 +128,7 @@ void print(int x, int y, char *string)
 void InitLightSource()
 {
 	glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
 	//glEnable(GL_LIGHT1);
 
 	GLfloat lmodel_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -137,7 +137,7 @@ void InitLightSource()
 	GLfloat l0Diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat l0Spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat l0Ambient[] = { .1f, 0.1f, 0.1f, 1.f };
-	GLfloat l0Position[] = { 10.0f, 0.0f, 0.0f, l0};
+	GLfloat l0Position[] = { -10.0f, 2.0f, .0f, l0};
 	GLfloat l0Direction[] = { -1.0, 0.0, 0.0 };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0Diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0Ambient);
@@ -182,8 +182,6 @@ void InitMaterial()
 	GLfloat shininess[] = { 96.0f };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 }
-
-
 
 //=======================================================================
 // Render Ground Function
@@ -240,6 +238,26 @@ void RenderSurface()
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
+void RenderSkyBox() {
+	//sky box
+	glDisable(GL_LIGHTING);	// Disable lighting 
+	glPushMatrix();
+
+	GLUquadricObj* qobj;
+	qobj = gluNewQuadric();
+	glTranslated(50, 0, 0);
+	glRotated(90, 1, 0, 1);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	gluQuadricTexture(qobj, true);
+	gluQuadricNormals(qobj, GL_SMOOTH);
+	gluSphere(qobj, 100, 100, 100);
+	gluDeleteQuadric(qobj);
+	glPopMatrix();
+	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
+
+}
+
 void renderWheel(float x, float lane) {
 
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
@@ -265,7 +283,6 @@ void renderObstacle(float x, float lane)
 
 
 	if (!level2) {
-		//Draw Wheels
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane);
 		glScalef(3, 3.5, 2);
@@ -311,6 +328,7 @@ void renderObstacle(float x, float lane)
 		tree_model.Draw();
 		glPopMatrix();
 	}
+
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 	
@@ -497,7 +515,7 @@ void myDisplay(void)
 		tex_surface.Load("Textures/grasstext.bmp");
 		level2 = true;
 	
-		GAME_SPEED = 1.4; //game speed increases
+		//GAME_SPEED = 1.4; //game speed increases
 
 		for (int i = 0; i < obstacles.size(); i++)
 		{
@@ -515,22 +533,7 @@ void myDisplay(void)
 
 	}
 
-	//sky box
-	glDisable(GL_LIGHTING);	// Disable lighting 
-	glPushMatrix();
-
-	GLUquadricObj * qobj;
-	qobj = gluNewQuadric();
-	glTranslated(50, 0, 0);
-	glRotated(90, 1, 0, 1);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	gluQuadricTexture(qobj, true);
-	gluQuadricNormals(qobj, GL_SMOOTH);
-	gluSphere(qobj, 100, 100, 100);
-	gluDeleteQuadric(qobj);
-	glPopMatrix();
-	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-
+	RenderSkyBox();
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 
 	glFlush();
