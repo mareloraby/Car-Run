@@ -34,8 +34,6 @@ char title[] = "Car Finite Run";
 float groundTransform = 0;
 
 int wheel_rotation_angle;
-bool l0,l1,l2;
-int light = 0;
 int player_lane = 1;
 int score = -1;
 int score_pos = -30;
@@ -60,7 +58,6 @@ int timePowerFail = 0;
 
 vector<Shape> obstacles;
 vector<Shape> wheels;
-
 
 struct Shape {
 	float x;
@@ -123,11 +120,9 @@ void print(int x, int y, char *string)
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
 	}
 }
-
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
-
 
 float lposx =2.0f;
 float lposy =3.0f;
@@ -364,6 +359,7 @@ void onObstacleCollision()
 	if (lives == 0)
 	{
 		//if lives are equal to zero 
+		gameLost = 1;
 		glFlush();
 	}
 
@@ -563,18 +559,16 @@ void anim()
 {
 	//light anim
 
-	if (timeElapsed == level1time/3) {
+	if (timeElapsed == level1time/5) {
 		cueRedSunset = true;
 	}
-	if (timeElapsed == level1time * (1/2)) {
+	if (timeElapsed == level1time * (2/3)) {
 		cueDarkerSunset = true;
 	}
 	if (timeElapsed == (level1time))
 	{
 		cueDarkness = true;
 	}
-
-
 
 
 	if (cueRedSunset) {
@@ -587,7 +581,7 @@ void anim()
 
 	if (cueDarkerSunset) {
 		if (lposz > -3) lposz = lposz - 0.005;
-		if (lposx > -0.1) lposx = lposx - 0.0005;
+		if (lposx > -0.2) lposx = lposx - 0.0005;
 		if (lposy > 0.5) lposy = lposy - 0.005;
 		if (lambientb < 0.2) lambientb = lambientb + 0.0001;
 
@@ -595,16 +589,12 @@ void anim()
 
 	if (cueDarkness) {
 		if (lambientb < 0.2) lambientb = lambientb + 0.001;
-		if (lambientr > 0.1) lambientr = lambientr - 0.001;
-		if (lposx > -0.7) lposx = lposx - 0.005;
+		if (lambientr > 0.05) lambientr = lambientr - 0.003;
+		lposx = lposx - 0.005;
 		if (lposy > -4) lposy = lposy - 0.005;	
 		if (lposz > -5) lposz = lposz - 0.005;
-
 	
 	}
-
-
-
 
 
 	// as long as there are lives 
@@ -756,7 +746,9 @@ void dropWheel(int v)
 void Timers(int value) {
 
 	timeElapsed +=1;
-	score += 1;
+	if (!gameLost || !gameWon) {
+		score += 1;
+	}
 	if (timeElapsed > timePowerFail) {
 		
 		gainedPowerUp = false;
