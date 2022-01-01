@@ -137,6 +137,9 @@ float lambientr = 0.1f;
 float lambientg = 0.1f;
 float lambientb = 0.1f;
 
+bool cueRedSunset = false;
+bool cueDarkerSunset = false;
+bool cueDarkness = false;
 
 void InitLightSource()
 {
@@ -558,6 +561,52 @@ void LoadAssets()
 //=======================================================================
 void anim()
 {
+	//light anim
+
+	if (timeElapsed == level1time/3) {
+		cueRedSunset = true;
+	}
+	if (timeElapsed == level1time * (1/2)) {
+		cueDarkerSunset = true;
+	}
+	if (timeElapsed == (level1time))
+	{
+		cueDarkness = true;
+	}
+
+
+
+
+	if (cueRedSunset) {
+		if (lposx > 0.5) lposx = lposx - 0.0003;
+		if(lambientr < 0.3) lambientr= lambientr + 0.001;
+		else {
+			cueRedSunset = false;
+		}
+	}
+
+	if (cueDarkerSunset) {
+		if (lposz > -3) lposz = lposz - 0.005;
+		if (lposx > -0.1) lposx = lposx - 0.0005;
+		if (lposy > 0.5) lposy = lposy - 0.005;
+		if (lambientb < 0.2) lambientb = lambientb + 0.0001;
+
+	}
+
+	if (cueDarkness) {
+		if (lambientb < 0.2) lambientb = lambientb + 0.001;
+		if (lambientr > 0.1) lambientr = lambientr - 0.001;
+		if (lposx > -0.7) lposx = lposx - 0.005;
+		if (lposy > -4) lposy = lposy - 0.005;	
+		if (lposz > -5) lposz = lposz - 0.005;
+
+	
+	}
+
+
+
+
+
 	// as long as there are lives 
 	if (lives != 0)
 	{
@@ -703,7 +752,6 @@ void dropWheel(int v)
 	}
 	glutTimerFunc(4000, dropWheel, 0);
 }
-
 
 void Timers(int value) {
 
