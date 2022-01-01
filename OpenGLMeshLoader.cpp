@@ -42,6 +42,15 @@ int score_pos = -30;
 int lives_pos  = -30;
 int stop = 1;
 int lives = 3;
+
+bool level2 = false;
+int timeElapsed = -1;
+int level1time = 15;
+int level2time = 30;
+
+bool gameWon = false;
+bool gameLost = false;
+
 bool hitObstacle = false;
 bool hitPowerUP = false;
 bool levelSound = false;
@@ -92,11 +101,6 @@ Model_3DS house_model;
 Model_3DS tree_model;
 Model_3DS box_model;
 
-bool level2 = false;
-int timeElapsed = -1;
-bool gameWon = false;
-bool gameLost = false;
-
 // Textures
 GLTexture tex_ground;
 GLTexture tex_surface;
@@ -123,44 +127,37 @@ void print(int x, int y, char *string)
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
+
+
+float lposx =2.0f;
+float lposy =3.0f;
+float lposz =2.0f;
+
+float lambientr = 0.1f;
+float lambientg = 0.1f;
+float lambientb = 0.1f;
+
+
 void InitLightSource()
 {
 	//glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	//glEnable(GL_LIGHT1);
 
 	GLfloat lmodel_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 
 	GLfloat l0Diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat l0Spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat l0Ambient[] = { 0.1f, 0.1f, 0.1f, 0.0f };
-	GLfloat l0Position[] = { 2, 3, 2, 0};
-	GLfloat l0Direction[] = { 1.0, 1.0, 1.0 };
+	GLfloat l0Ambient[] = { lambientr, lambientg, lambientb, 0.0f };
+	GLfloat l0Position[] = { lposx, lposy, lposz, 0};
+
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0Diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0Ambient);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, l0Spec);
 	glLightfv(GL_LIGHT0, GL_POSITION, l0Position);
-	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l0Direction);
-
-	//GLfloat l1Diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-	//GLfloat l1Ambient[] = { 0.1f, .1f, 0.1f, 1.0f };
-	//GLfloat l1Spec[] = { 1.0f, 0.0f, 1.0f, 1.0f };
-	//GLfloat l1Position[] = { 0.0f, 10.0f, 0.0f, l1 };
-	//GLfloat l1Direction[] = { 0.0, -1.0, 0.0 };
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, l1Diffuse);
-	//glLightfv(GL_LIGHT1, GL_AMBIENT, l1Ambient);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, l1Spec);
-	//glLightfv(GL_LIGHT1, GL_POSITION, l1Position);
-	//glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
-	//glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 90.0);
-	//glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, l1Direction);
 
 }
 
-//=======================================================================
-// Material Configuration Function
-//======================================================================
 void InitMaterial()
 {
 	// Enable Material Tracking
@@ -179,9 +176,6 @@ void InitMaterial()
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 }
 
-//=======================================================================
-// Render Ground Function
-//=======================================================================
 void RenderGround()
 {
 	glDisable(GL_LIGHTING);	// Disable lighting 
@@ -311,11 +305,14 @@ void renderObstacle(float x, float lane)
 		box_model.Draw();
 		glPopMatrix();
 		
+		glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
 		glPushMatrix();
 		glTranslatef(x + 5, 3.7, lane + 15);
 		glScalef(0.0009, 0.0009, 0.0009);
 		house_model.Draw();
 		glPopMatrix();
+		glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 
 		// draw trees
 		glPushMatrix();
@@ -330,7 +327,6 @@ void renderObstacle(float x, float lane)
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 	
 }
-
 // adds an obstacle behind the skybox
 void addObstacle(int lane)
 {
@@ -393,7 +389,6 @@ int random(int lower, int upper)
 //=======================================================================
 // Display Function
 //=======================================================================
-
 
 void myDisplay(void)
 {
@@ -506,12 +501,11 @@ void myDisplay(void)
 
 	
 
-	if (timeElapsed == 20 && lives != 0) { //go to level 2
+	if (timeElapsed == level1time && lives != 0) { //go to level 2
 		glutSwapBuffers();
-
 		tex_surface.Load("Textures/grasstext.bmp");
 		level2 = true;
-	
+
 		//GAME_SPEED = 1.4; //game speed increases
 
 		for (int i = 0; i < obstacles.size(); i++)
@@ -523,7 +517,7 @@ void myDisplay(void)
 			wheels[i].x -= 200;
 		}
 	}
-	else if (timeElapsed == 60 && lives != 0) {
+	else if (timeElapsed == (level1time + level2time) && lives != 0) {
 
 		stop = 0;
 		exit(EXIT_SUCCESS);
@@ -535,7 +529,6 @@ void myDisplay(void)
 
 	glFlush();
 }
-
 //=======================================================================
 // Assets Loading Function
 //=======================================================================
@@ -560,11 +553,10 @@ void LoadAssets()
 
 	loadBMP(&tex, "Textures/blu-sky-3.bmp", true);
 }
-
 //=======================================================================
 // Animation Function
 //=======================================================================
-void anime()
+void anim()
 {
 	// as long as there are lives 
 	if (lives != 0)
@@ -666,7 +658,6 @@ void Keyboard(unsigned char key, int x, int y) {
 
 	glutPostRedisplay();
 }
-
 // camera controls
 void Special(int key, int x, int y) {
 	float a = 1.0;
@@ -713,29 +704,6 @@ void dropWheel(int v)
 	glutTimerFunc(4000, dropWheel, 0);
 }
 
-void lightAnim(int time)
-{
-	cout << light;
-	if (light == 0) {
-		l0 = 1;
-		l1 = 0;
-		l2 = 0;
-	}
-	if (light == 1) {
-		l0 = 0;
-		l1 = 1;
-		l2 = 0;
-	}
-	if (light == 2) {
-		l0 = 0;
-		l1 = 0;
-		l2 = 1;
-	}
-	light++;
-	light %= 3;
-	glutTimerFunc(1500, lightAnim, 0);
-}
-
 
 void Timers(int value) {
 
@@ -762,10 +730,9 @@ void main(int argc, char** argv)
 	glutInitWindowPosition(100, 150);
 	glutCreateWindow(title);
 	glutDisplayFunc(myDisplay);
-	glutIdleFunc(anime);
+	glutIdleFunc(anim);
 	glutTimerFunc(0, dropStone, 0);
 	glutTimerFunc(0, dropWheel, 0);
-	glutTimerFunc(0, lightAnim, 0);
 	glutTimerFunc(0, Timers, 0);
 
 
