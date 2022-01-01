@@ -493,12 +493,9 @@ void myDisplay(void)
 
 	if (timeElapsed == 20 && lives != 0) { //go to level 2
 		glutSwapBuffers();
+
 		tex_surface.Load("Textures/grasstext.bmp");
 		level2 = true;
-		if (!levelSound) {
-			PlaySound(TEXT("audios/LevelUP.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
-			levelSound = false;
-		}
 	
 		GAME_SPEED = 1.4; //game speed increases
 
