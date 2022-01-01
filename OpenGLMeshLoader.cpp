@@ -37,9 +37,7 @@ int wheel_rotation_angle;
 bool l0,l1,l2;
 int light = 0;
 int player_lane = 1;
-int score = 0;
-int virtual_score = 0;
-int maxScore = 10;
+int score = -1;
 int score_pos = -30;
 int lives_pos  = -30;
 int stop = 1;
@@ -127,38 +125,36 @@ void print(int x, int y, char *string)
 //=======================================================================
 void InitLightSource()
 {
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	//glEnable(GL_LIGHT1);
 
 	GLfloat lmodel_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 
-	GLfloat l0Diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat l0Diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat l0Spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat l0Ambient[] = { .1f, 0.1f, 0.1f, 1.f };
-	GLfloat l0Position[] = { -10.0f, 2.0f, .0f, l0};
-	GLfloat l0Direction[] = { -1.0, 0.0, 0.0 };
+	GLfloat l0Ambient[] = { 0.1f, 0.1f, 0.1f, 0.0f };
+	GLfloat l0Position[] = { 2, 3, 2, 0};
+	GLfloat l0Direction[] = { 1.0, 1.0, 1.0 };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0Diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0Ambient);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, l0Spec);
 	glLightfv(GL_LIGHT0, GL_POSITION, l0Position);
-	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l0Direction);
+	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l0Direction);
 
-	GLfloat l1Diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-	GLfloat l1Ambient[] = { 0.1f, .1f, 0.1f, 1.0f };
-	GLfloat l1Spec[] = { 1.0f, 0.0f, 1.0f, 1.0f };
-	GLfloat l1Position[] = { 0.0f, 10.0f, 0.0f, l1 };
-	GLfloat l1Direction[] = { 0.0, -1.0, 0.0 };
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, l1Diffuse);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, l1Ambient);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, l1Spec);
-	glLightfv(GL_LIGHT1, GL_POSITION, l1Position);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, l1Direction);
+	//GLfloat l1Diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+	//GLfloat l1Ambient[] = { 0.1f, .1f, 0.1f, 1.0f };
+	//GLfloat l1Spec[] = { 1.0f, 0.0f, 1.0f, 1.0f };
+	//GLfloat l1Position[] = { 0.0f, 10.0f, 0.0f, l1 };
+	//GLfloat l1Direction[] = { 0.0, -1.0, 0.0 };
+	//glLightfv(GL_LIGHT1, GL_DIFFUSE, l1Diffuse);
+	//glLightfv(GL_LIGHT1, GL_AMBIENT, l1Ambient);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, l1Spec);
+	//glLightfv(GL_LIGHT1, GL_POSITION, l1Position);
+	//glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
+	//glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 90.0);
+	//glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, l1Direction);
 
 }
 
@@ -217,7 +213,7 @@ void RenderGround()
 
 void RenderSurface()
 {
-	glDisable(GL_LIGHTING);	// Disable lighting
+	//glDisable(GL_LIGHTING);	// Disable lighting
 	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
 	glBindTexture(GL_TEXTURE_2D, tex_surface.texture[0]);	// Bind the ground texture
@@ -234,13 +230,13 @@ void RenderSurface()
 	glVertex3f(-200, 0, 200);
 	glEnd();
 	glPopMatrix();
-	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+//	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
 void RenderSkyBox() {
 	//sky box
-	glDisable(GL_LIGHTING);	// Disable lighting 
+//	glDisable(GL_LIGHTING);	// Disable lighting 
 	glPushMatrix();
 
 	GLUquadricObj* qobj;
@@ -253,7 +249,8 @@ void RenderSkyBox() {
 	gluSphere(qobj, 100, 100, 100);
 	gluDeleteQuadric(qobj);
 	glPopMatrix();
-	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+//	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 
 
 }
@@ -363,6 +360,7 @@ void onObstacleCollision()
 		}
 
 		lives--;
+		score = score - 3;
 	}
 	if (lives == 0)
 	{
@@ -429,8 +427,7 @@ void myDisplay(void)
 	}
 
 	glDisable(GL_LIGHTING);	// Disable lighting 
-
-	sprintf((char *)strScore, "Score : %d", timeElapsed);
+	sprintf((char *)strScore, "Score : %d", score);
 	print(50, 50, (char *)strScore);
 	glEnable(GL_LIGHTING);
 
@@ -554,9 +551,9 @@ void LoadAssets()
 	box_model.Load("Models/waste/Bin Polymer trash bin BM-5000 N080818.3DS");
 
 	// Loading texture files
-	if (score <= 2) {
-		tex_ground.Load("Textures/ground.bmp");
-	}
+	
+	tex_ground.Load("Textures/ground.bmp");
+	
 	tex_surface.Load("Textures/surface.bmp");
 
 	tex_wood.Load("Textures/wall.bmp");
@@ -743,6 +740,7 @@ void lightAnim(int time)
 void Timers(int value) {
 
 	timeElapsed +=1;
+	score += 1;
 	if (timeElapsed > timePowerFail) {
 		
 		gainedPowerUp = false;
