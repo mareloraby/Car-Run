@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
+#include <windows.h>
+#include <mmsystem.h>
 #include "Vector3f.h"
 #include "Camera.h" 
 
@@ -42,6 +44,10 @@ int score_pos = -30;
 int lives_pos  = -30;
 int stop = 1;
 int lives = 3;
+bool hitObstacle = false;
+bool hitPowerUP = false;
+bool levelSound = false;
+
 bool gainedPowerUp = false;
 int timePowerFail = 0;
 
@@ -88,7 +94,6 @@ Model_3DS house_model;
 Model_3DS tree_model;
 Model_3DS box_model;
 
-
 bool level2 = false;
 int timeElapsed = -1;
 bool gameWon = false;
@@ -102,6 +107,7 @@ GLTexture tex_wood;
 void print(int x, int y, char *string)
 {
 	int len, i;
+	glColor3f(0, 0, 0);	
 
 	//set the position of the text in the window using the x and y coordinates
 	glRasterPos2f(x, y);
@@ -234,7 +240,6 @@ void RenderSurface()
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
-
 void renderWheel(float x, float lane) {
 
 	glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
@@ -264,7 +269,6 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane);
 		glScalef(3, 3.5, 2);
-		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		stone_model.Draw();
 		glPopMatrix();
 
@@ -273,7 +277,6 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane + 10);
 		glScalef(0.01, 0.01, 0.01);
-		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		palm_model.Draw();
 		glPopMatrix();
 
@@ -281,7 +284,6 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane - 15);
 		glScalef(0.01, 0.01, 0.01);
-		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		palm_model.Draw();
 		glPopMatrix();
 	}
@@ -298,11 +300,10 @@ void renderObstacle(float x, float lane)
 		glPushMatrix();
 		glTranslatef(x + 5, 3.7, lane + 15);
 		glScalef(0.0009, 0.0009, 0.0009);
-		//glRotatef(wheel_rotation_angle, 0, 1, 0);
 		house_model.Draw();
 		glPopMatrix();
 
-		// draw palm trees
+		// draw trees
 		glPushMatrix();
 		glTranslatef(x + 5, 3.6, lane - 15);
 		glScalef(0.001, 0.001, 0.001);
@@ -338,6 +339,11 @@ void destroyAtIndex(int index, vector<Shape> &shapes)
 void onObstacleCollision()
 {
 	if (!gainedPowerUp) {
+		if (!hitObstacle) {
+			PlaySound(TEXT("audios/Crash.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
+			hitObstacle = false;
+		}
+
 		lives--;
 	}
 	if (lives == 0)
@@ -352,7 +358,12 @@ void onWheelCollision(int i)
 {
 	glFlush();
 	glutSwapBuffers();
+
 	gainedPowerUp = true;
+	if (!hitPowerUP) {
+		PlaySound(TEXT("audios/powerup.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
+		hitPowerUP = false;
+	}
 	timePowerFail = timeElapsed + 5;
 
 	
@@ -377,14 +388,10 @@ void myDisplay(void)
 	InitLightSource();
 	InitMaterial();
 
-	/*GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
-	GLfloat lightPosition[] = { 0.0f, 100.0f, 0.0f, 0.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);*/
-
 	// Display Score
 	char* strScore[20];
 	char* strLives[20];
+
 
 	// score display
 	glPushMatrix();
@@ -403,9 +410,14 @@ void myDisplay(void)
 
 	}
 
+	glDisable(GL_LIGHTING);	// Disable lighting 
+
 	sprintf((char *)strScore, "Score : %d", timeElapsed);
 	print(50, 50, (char *)strScore);
+	glEnable(GL_LIGHTING);
+
 	glPopMatrix();
+
 
 	// lives display
 	glPushMatrix();
@@ -426,8 +438,10 @@ void myDisplay(void)
 	
 	int k = 0;
 	char livesString[] = "Lives = %d/%d";
+	glDisable(GL_LIGHTING);	// Disable lighting 
 	sprintf((char*)strLives, livesString,lives,3);
 	print(50, 50, (char*)strLives);
+	glEnable(GL_LIGHTING);
 	/*for (int i = 0; i < lives; i++)
 	{
 		glTranslatef(-10, lives_pos, -16+k);
@@ -463,12 +477,11 @@ void myDisplay(void)
 	glEnable(GL_LIGHTING);	// Disable lighting 
 	glPopMatrix();
 
-	//Draw all Wheels
+	//Draw all Wheels(powerup)
 	for (unsigned i = 0; i < wheels.size(); i++)
 	{
 		renderWheel(wheels[i].x, lanes[wheels[i].lane]);
 	}
-
 
 	// Draw all obstacles
 	for (unsigned i = 0; i < obstacles.size(); i++)
@@ -480,10 +493,14 @@ void myDisplay(void)
 
 	if (timeElapsed == 20 && lives != 0) { //go to level 2
 		glutSwapBuffers();
-
 		tex_surface.Load("Textures/grasstext.bmp");
 		level2 = true;
-		GAME_SPEED = 1.6; //game speed increases
+		if (!levelSound) {
+			PlaySound(TEXT("audios/LevelUP.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
+			levelSound = false;
+		}
+	
+		GAME_SPEED = 1.4; //game speed increases
 
 		for (int i = 0; i < obstacles.size(); i++)
 		{
@@ -501,7 +518,7 @@ void myDisplay(void)
 
 	}
 
-	//sky box4
+	//sky box
 	glDisable(GL_LIGHTING);	// Disable lighting 
 	glPushMatrix();
 
