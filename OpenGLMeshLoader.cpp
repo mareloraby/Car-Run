@@ -21,7 +21,7 @@ int lanes[3] = { LEFT_LANE,CENTER_LANE,RIGHT_LANE };
 
 struct Shape;
 const int SKYBOX_BOUNDARY = 40;
-const float GAME_SPEED = 0.8;
+float GAME_SPEED = 0.8;
 
 
 int WIDTH = 1280;
@@ -91,6 +91,9 @@ Model_3DS box_model;
 
 bool level2 = false;
 int timeElapsed = -1;
+bool gameWon = false;
+bool gameLost = false;
+
 // Textures
 GLTexture tex_ground;
 GLTexture tex_surface;
@@ -119,11 +122,8 @@ void print(int x, int y, char *string)
 void InitLightSource()
 {
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
-
-	
+	//glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
 
 	GLfloat lmodel_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
@@ -153,20 +153,6 @@ void InitLightSource()
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 90.0);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, l1Direction);
-
-	GLfloat l2Diffuse[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-	GLfloat l2Ambient[] = { 0.0f, 0.0f, .1f, 1.0f };
-	GLfloat l2Spec[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-	GLfloat l2Position[] = { 0.0f, 0.0f, 10.0f, l2 };
-	GLfloat l2Direction[] = { 0.0, 0.0, -1.0 };
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, l2Diffuse);
-	glLightfv(GL_LIGHT2, GL_AMBIENT, l2Ambient);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, l2Spec);
-	glLightfv(GL_LIGHT2, GL_POSITION, l2Position);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, l2Direction);
-
 
 }
 
@@ -497,6 +483,7 @@ void myDisplay(void)
 
 		tex_surface.Load("Textures/grasstext.bmp");
 		level2 = true;
+		GAME_SPEED = 1.6; //game speed increases
 
 		for (int i = 0; i < obstacles.size(); i++)
 		{
