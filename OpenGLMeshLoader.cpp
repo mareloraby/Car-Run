@@ -22,12 +22,15 @@ using namespace std;
 int lanes[3] = { LEFT_LANE,CENTER_LANE,RIGHT_LANE };
 
 struct Shape;
-float GAME_SPEED = 0.8;
+float GAME_SPEED = 0.6;
+float GAME_SPEED_OLD = 0.6;
+
 int WIDTH = 1280;
 int HEIGHT = 720;
 GLuint tex;
 char title[] = "Car Finite Run";
 
+int timeSlowSpeedFail = 0;
 float groundTransform = 0;
 int wheel_rotation_angle;
 int player_lane = 1;
@@ -38,7 +41,7 @@ int stop = 1;
 int lives = 3;
 bool level2 = false;
 int timeElapsed = -1;
-int level1time = 15;
+int level1time = 20;
 int level2time = 30;
 bool gameWon = false;
 bool gameLost = false;
@@ -132,6 +135,15 @@ float lambientb = 0.1f;
 bool cueRedSunset = false;
 bool cueDarkerSunset = false;
 bool cueDarkness = false;
+
+unsigned seed = time(0);
+
+int random(int lower, int upper)
+{
+
+	return (rand() % (upper - lower + 1)) + lower;
+}
+
 
 void InitLightSource()
 {
@@ -367,21 +379,22 @@ void onWheelCollision(int i)
 {
 	glFlush();
 	glutSwapBuffers();
-
-	gainedPowerUp = true;
 	if (!hitPowerUP) {
 		PlaySound(TEXT("audios/powerup.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
 		hitPowerUP = false;
 	}
-	timePowerFail = timeElapsed + 5;
 
-	
+	int randomPwr = random(1,3);
+	cout << randomPwr << endl;
+
+	switch (randomPwr) {
+	case 1: gainedPowerUp = true; timePowerFail = timeElapsed + 5; break;
+	case 2: if (lives < 3) lives++; break;
+	case 3: GAME_SPEED = 0.4; timeSlowSpeedFail = timeElapsed + 5; break;
+
+	}
 }
 
-int random(int lower, int upper)
-{
-	return (rand() % (upper - lower + 1)) + lower;
-}
 
 //=======================================================================
 // Display Function
@@ -552,7 +565,8 @@ void myDisplay(void)
 		tex_surface.Load("Textures/grasstext.bmp");
 		level2 = true;
 
-		//GAME_SPEED = 1.4; //game speed increases
+		GAME_SPEED = 0.9; //game speed increases
+		GAME_SPEED_OLD = 0.9;
 
 		for (int i = 0; i < obstacles.size(); i++)
 		{
@@ -820,6 +834,11 @@ void Timers(int value) {
 		
 		gainedPowerUp = false;
 
+	}
+
+	if (timeElapsed > timeSlowSpeedFail) {
+	
+		GAME_SPEED = GAME_SPEED_OLD;
 	}
 	//cout << timeElapsed << endl;
 	glutTimerFunc(900, Timers, 0);
