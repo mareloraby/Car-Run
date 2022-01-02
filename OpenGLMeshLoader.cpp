@@ -22,17 +22,13 @@ using namespace std;
 int lanes[3] = { LEFT_LANE,CENTER_LANE,RIGHT_LANE };
 
 struct Shape;
-const int SKYBOX_BOUNDARY = 40;
 float GAME_SPEED = 0.8;
-
-
 int WIDTH = 1280;
 int HEIGHT = 720;
 GLuint tex;
 char title[] = "Car Finite Run";
 
 float groundTransform = 0;
-
 int wheel_rotation_angle;
 int player_lane = 1;
 int score = -1;
@@ -40,21 +36,18 @@ int score_pos = -30;
 int lives_pos  = -30;
 int stop = 1;
 int lives = 3;
-
 bool level2 = false;
 int timeElapsed = -1;
 int level1time = 15;
 int level2time = 30;
-
 bool gameWon = false;
 bool gameLost = false;
-
 bool hitObstacle = false;
 bool hitPowerUP = false;
 bool levelSound = false;
-
 bool gainedPowerUp = false;
 int timePowerFail = 0;
+int cameraZoom = 0;
 
 vector<Shape> obstacles;
 vector<Shape> wheels;
@@ -68,7 +61,6 @@ struct Shape {
 	};
 };
 
-int cameraZoom = 0;
 
 Camera camera = Camera(0.5f, 2.0f, 0.0f, 1.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 //*******************************************************************************************//
@@ -210,7 +202,7 @@ void RenderGround()
 
 void RenderSurface()
 {
-	//glDisable(GL_LIGHTING);	// Disable lighting
+	if(!cueDarkerSunset || level2) glDisable(GL_LIGHTING);	// Disable lighting
 	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
 	glBindTexture(GL_TEXTURE_2D, tex_surface.texture[0]);	// Bind the ground texture
@@ -227,7 +219,7 @@ void RenderSurface()
 	glVertex3f(-200, 0, 200);
 	glEnd();
 	glPopMatrix();
-//	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+	if (!cueDarkerSunset || level2) glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
@@ -309,12 +301,13 @@ void renderObstacle(float x, float lane)
 		glPopMatrix();
 		
 		glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-
 		glPushMatrix();
 		glTranslatef(x + 5, 3.7, lane + 15);
 		glScalef(0.0009, 0.0009, 0.0009);
 		house_model.Draw();
 		glPopMatrix();
+		glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
 
 		// draw trees
 		glPushMatrix();
@@ -323,19 +316,17 @@ void renderObstacle(float x, float lane)
 		glRotatef(180, 0, 1, 0);
 		tree_model.Draw();
 		glPopMatrix();
-		glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-
 	}
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 	
 }
-// adds an obstacle behind the skybox
+
 void addObstacle(int lane)
 {
 	obstacles.push_back(Shape(RESPAWN_POSITION, lane));
-}
+}// adds an obstacle behind the skybox
 
 void addWheel(int lane)
 {
