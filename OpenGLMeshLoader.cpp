@@ -698,6 +698,36 @@ void anim()
 	
 }
 
+bool top = false;
+bool front = true;
+
+void actM(int button, int state, int x, int y)//mouse function takes 4 parameters: button: which button has been clicked (GLUT_RIGHT_BUTTON or GLUT_LEFT_BUTTON),
+											//state wether the button is clicked or released (GLUT_UP or GLUT_DOWN)
+											// x and y are the position of the mouse cursor
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)//if the left button has been clicked then translate the square to the mouse position
+	{
+		//top
+		top = true;
+		front = false;
+		score_pos = -48.5;
+		lives_pos = -48.5;
+		camera = Camera(-8.0f, 7.0f, lanes[player_lane], -1.0f, 2.7f, lanes[player_lane], 0.0f, 1.0f, 0.0f);
+	
+	}
+
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)//if the right button has been clicked, translate  the square to the origin (0,0)
+	{ //front
+		top = false;
+		front = true;
+		score_pos = -30;
+		lives_pos = -30;
+		camera = Camera(0.5f, 2.0f, lanes[player_lane], 1.0f, 2.0f, lanes[player_lane], 0.0f, 1.0f, 0.0f);;
+	}
+
+	glutPostRedisplay();//redisplay to update the screen with the new paraeters
+}
+
 void Keyboard(unsigned char key, int x, int y) {
 	float d = 0.8;
 	float x_car_cam = 2;
@@ -724,23 +754,12 @@ void Keyboard(unsigned char key, int x, int y) {
 		}
 		break;
 	case 'q':
-		camera.moveZ(d);
+		if(!front) camera.moveZ(d);
 		break;
 	case 'e':
-		camera.moveZ(-d);
+		if (!front) camera.moveZ(-d);
 		break;
 
-	case 't':
-		score_pos = -48.5;
-		lives_pos = -48.5;
-		camera = Camera(-8.0f, 7.0f, lanes[player_lane], -1.0f, 2.7f, lanes[player_lane], 0.0f, 1.0f, 0.0f);
-		break;
-
-	case 'f':
-		score_pos = -30;
-		lives_pos = -30;
-		camera = Camera(0.5f, 2.0f, lanes[player_lane], 1.0f, 2.0f, lanes[player_lane], 0.0f, 1.0f, 0.0f);;
-		break;
 	case GLUT_KEY_ESCAPE:
 		exit(EXIT_SUCCESS);
 	}
@@ -826,6 +845,7 @@ void main(int argc, char** argv)
 
 	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(Special);
+	glutMouseFunc(actM);			//call the mouse function
 	LoadAssets();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
