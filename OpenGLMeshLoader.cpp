@@ -314,7 +314,6 @@ void renderObstacle(float x, float lane)
 		glScalef(0.0009, 0.0009, 0.0009);
 		house_model.Draw();
 		glPopMatrix();
-		glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 
 		// draw trees
 		glPushMatrix();
@@ -323,6 +322,8 @@ void renderObstacle(float x, float lane)
 		glRotatef(180, 0, 1, 0);
 		tree_model.Draw();
 		glPopMatrix();
+		glDisable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
 	}
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
@@ -495,6 +496,22 @@ void myDisplay(void)
 		glEnable(GL_LIGHTING);
 	}
 
+	//if (!level2 && !gameWon && !gameLost) {
+	//	glDisable(GL_LIGHTING);	// Disable lighting 
+	//	sprintf((char*)gameLostStr, "Level 1");
+	//	print(50, 50, (char*)gameLostStr);
+	//	glEnable(GL_LIGHTING);
+	//}
+	//if (level2 && !gameWon && !gameLost) {
+	//	glDisable(GL_LIGHTING);	// Disable lighting 
+	//	sprintf((char*)gameLostStr, "Level 2");
+	//	print(50, 50, (char*)gameLostStr);
+	//	glEnable(GL_LIGHTING);
+	//}
+
+
+
+
 
 	glPopMatrix();
 
@@ -601,44 +618,45 @@ void anim()
 	if ( !gameLost && !gameWon) {
 		score += 1;
 	
-	//light anim
+		//light anim
 
-	if (timeElapsed == level1time/5) {
-		cueRedSunset = true;
-	}
-	if (timeElapsed == level1time * (2/3)) {
-		cueDarkerSunset = true;
-	}
-	if (timeElapsed == (level1time))
-	{
-		cueDarkness = true;
-	}
-
-
-	if (cueRedSunset) {
-		if (lposx > 0.5) lposx = lposx - 0.0003;
-		if(lambientr < 0.25) lambientr= lambientr + 0.001;
-		else {
-			cueRedSunset = false;
+		if (timeElapsed == level1time/5) {
+			cueRedSunset = true;
 		}
-	}
+		if (timeElapsed == level1time * (2/3)) {
+			cueDarkerSunset = true;
+		}
+		if (timeElapsed == (level1time))
+		{
+			cueDarkness = true;
+		}
 
-	if (cueDarkerSunset) {
-		if (lposz > -3) lposz = lposz - 0.005;
-		if (lposx > -0.2) lposx = lposx - 0.0005;
-		if (lposy > 0.5) lposy = lposy - 0.005;
-		if (lambientb < 0.2) lambientb = lambientb + 0.0001;
 
-	}
+		if (cueRedSunset) {
+			if (lposx > 0.5) lposx = lposx - 0.0015;
+			if (lambientr < 0.25) lambientr = lambientr + 0.002;
+			else {
+				cueRedSunset = false;
+			}
+		}
 
-	if (cueDarkness) {
-		if (lambientb < 0.2) lambientb = lambientb + 0.001;
-		if (lambientr > 0.05) lambientr = lambientr - 0.001;
-		lposx = lposx - 0.005;
-		if (lposy > -4) lposy = lposy - 0.005;	
-		if (lposz > -5) lposz = lposz - 0.005;
+		if (cueDarkerSunset) {
+			if (lposx > -0.2) lposx = lposx - 0.0005;
+			if (lposz > -3) lposz = lposz - 0.005;
+			if (lposy > 0.5) lposy = lposy - 0.005;
+			if (lambientb < 0.2) lambientb = lambientb + 0.0001;
+		
+
+		}
+
+		if (cueDarkness) {
+			if (lambientb < 0.2) lambientb = lambientb + 0.0004;
+			if (lambientr > 0.05) lambientr = lambientr - 0.0005;
+			lposx = lposx - 0.005;
+			if (lposy > -4) lposy = lposy - 0.005;	
+			if (lposz > -5) lposz = lposz - 0.005;
 	
-	}
+		}
 	
 		wheel_rotation_angle += 5 * stop;
 		for (int i = 0; i < obstacles.size(); i++)
