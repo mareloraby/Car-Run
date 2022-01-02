@@ -22,8 +22,8 @@ using namespace std;
 int lanes[3] = { LEFT_LANE,CENTER_LANE,RIGHT_LANE };
 
 struct Shape;
-float GAME_SPEED = 0.6;
-float GAME_SPEED_OLD = 0.6;
+float GAME_SPEED = 0.7;
+float GAME_SPEED_OLD = 0.7;
 
 int WIDTH = 1280;
 int HEIGHT = 720;
@@ -63,7 +63,6 @@ struct Shape {
 		this->x = x, this->lane = lane;
 	};
 };
-
 
 Camera camera = Camera(0.5f, 2.0f, 0.0f, 1.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 //*******************************************************************************************//
@@ -136,13 +135,16 @@ bool cueRedSunset = false;
 bool cueDarkerSunset = false;
 bool cueDarkness = false;
 
-unsigned seed = time(0);
+
+
+
 
 int random(int lower, int upper)
 {
 
 	return (rand() % (upper - lower + 1)) + lower;
 }
+
 
 
 void InitLightSource()
@@ -395,7 +397,6 @@ void onWheelCollision(int i)
 	}
 }
 
-
 //=======================================================================
 // Display Function
 //=======================================================================
@@ -559,7 +560,6 @@ void myDisplay(void)
 	}
 
 	
-
 	if (timeElapsed == level1time && lives != 0) { //go to level 2
 		glutSwapBuffers();
 		tex_surface.Load("Textures/grasstext.bmp");
@@ -584,7 +584,6 @@ void myDisplay(void)
 		//exit(EXIT_SUCCESS);
 
 	}
-
 	RenderSkyBox();
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 
