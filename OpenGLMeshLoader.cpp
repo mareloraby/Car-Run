@@ -109,9 +109,10 @@ void print(int x, int y, char *string)
 	glColor3f(0, 0, 0);	
 	if (gameWon) {
 		glColor3f(1, 1, 1);
-
 	}
-
+	if (gameLost) {
+		glColor3f(1, 0, 0);
+	}
 	//set the position of the text in the window using the x and y coordinates
 	glRasterPos2f(x, y);
 
@@ -496,18 +497,18 @@ void myDisplay(void)
 		glEnable(GL_LIGHTING);
 	}
 
-	//if (!level2 && !gameWon && !gameLost) {
-	//	glDisable(GL_LIGHTING);	// Disable lighting 
-	//	sprintf((char*)gameLostStr, "Level 1");
-	//	print(50, 50, (char*)gameLostStr);
-	//	glEnable(GL_LIGHTING);
-	//}
-	//if (level2 && !gameWon && !gameLost) {
-	//	glDisable(GL_LIGHTING);	// Disable lighting 
-	//	sprintf((char*)gameLostStr, "Level 2");
-	//	print(50, 50, (char*)gameLostStr);
-	//	glEnable(GL_LIGHTING);
-	//}
+	if (!level2 && !gameWon && !gameLost) {
+		glDisable(GL_LIGHTING);	// Disable lighting 
+		sprintf((char*)gameLostStr, "Level 1");
+		print(50, 50, (char*)gameLostStr);
+		glEnable(GL_LIGHTING);
+	}
+	if (level2 && !gameWon && !gameLost) {
+		glDisable(GL_LIGHTING);	// Disable lighting 
+		sprintf((char*)gameLostStr, "Level 2");
+		print(50, 50, (char*)gameLostStr);
+		glEnable(GL_LIGHTING);
+	}
 
 
 
