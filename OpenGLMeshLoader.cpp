@@ -528,7 +528,7 @@ void myDisplay(void)
 		glEnable(GL_LIGHTING);
 	}
 
-	if (!level2 && !gameWon && !gameLost) {
+	if (!level2 && !level3 && !gameWon && !gameLost) {
 		glDisable(GL_LIGHTING);	// Disable lighting 
 		sprintf((char*)gameLostStr, "Level 1");
 		print(50, 50, (char*)gameLostStr);
@@ -561,7 +561,7 @@ void myDisplay(void)
 	RenderSurface();
 	glPopMatrix();
 
-	// Draw Ground
+	// Draw Street
 	glPushMatrix();
 	glTranslated(groundTransform, 0.5, 0);
 	RenderGround();
@@ -611,7 +611,7 @@ void myDisplay(void)
 	}
 	else if (timeElapsed == (level1time + level2time) && lives != 0) { // go to level 3
 		
-		glutSwapBuffers();
+		//glutSwapBuffers();
 		 GAME_SPEED = 0.8;
 		 GAME_SPEED_OLD = 0.8;
 		tex_surface.Load("Textures/sea.bmp");
