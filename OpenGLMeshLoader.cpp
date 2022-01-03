@@ -40,9 +40,11 @@ int lives_pos  = -30;
 int stop = 1;
 int lives = 3;
 bool level2 = false;
+bool level3 = false;
 int timeElapsed = -1;
 int level1time = 20;
 int level2time = 30;
+int level3time = 30;
 bool gameWon = false;
 bool gameLost = false;
 bool hitObstacle = false;
@@ -91,6 +93,7 @@ Model_3DS palm_model;
 Model_3DS house_model;
 Model_3DS tree_model;
 Model_3DS box_model;
+Model_3DS boat_model;
 
 // Textures
 GLTexture tex_ground;
@@ -369,7 +372,7 @@ void renderObstacle(float x, float lane)
     
 
 
-	if (!level2) {
+	if (!level2 && !level3) {
 		glPushMatrix();
 		glTranslatef(x + 5, 0.35, lane);
 		glScalef(3, 3.5, 2);
@@ -391,8 +394,8 @@ void renderObstacle(float x, float lane)
 		palm_model.Draw();
 		glPopMatrix();
 	}
-
-	else {
+	
+	else if(level2 && !level3){
 
 		glPushMatrix();
 		glTranslatef(x + 5, 1, lane);
@@ -417,6 +420,33 @@ void renderObstacle(float x, float lane)
 		glRotatef(180, 0, 1, 0);
 		tree_model.Draw();
 		glPopMatrix();
+	}
+	else
+	{
+		glPushMatrix();
+		glTranslatef(x + 5, 0.35, lane);
+		glScalef(3, 3.5, 2);
+		stone_model.Draw();
+		glPopMatrix();
+
+
+		// draw palm trees
+		glPushMatrix();
+		glTranslatef(x + 5, 1.9, lane + 12);
+		glScalef(0.03, 0.03, 0.03);
+		glRotatef(90, 1, 0, 0);
+		boat_model.Draw();
+		glPopMatrix();
+
+		// draw palm trees
+		glPushMatrix();
+		glTranslatef(x + 5, 1.9, lane - 15);
+		glScalef(0.03, 0.03, 0.03);
+		glRotatef(90, 1, 0, 0);
+		boat_model.Draw();
+		glPopMatrix();
+
+
 	}
 
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
@@ -601,6 +631,12 @@ void myDisplay(void)
 		print(50, 50, (char*)gameLostStr);
 		glEnable(GL_LIGHTING);
 	}
+	if (level3 && !gameWon && !gameLost) {
+		glDisable(GL_LIGHTING);	// Disable lighting 
+		sprintf((char*)gameLostStr, "Level 3");
+		print(50, 50, (char*)gameLostStr);
+		glEnable(GL_LIGHTING);
+	}
 
 
 
@@ -664,12 +700,31 @@ void myDisplay(void)
 			wheels[i].x -= 200;
 		}
 	}
-	else if (timeElapsed == (level1time + level2time) && lives != 0) {
+	else if (timeElapsed == (level1time + level2time) && lives != 0) { // go to level 3
+		
+		glutSwapBuffers();
+		 GAME_SPEED = 0.8;
+		 GAME_SPEED_OLD = 0.8;
+		tex_surface.Load("Textures/sea.bmp");
+		
+		level2 = false;
+		level3 = true;
 
+		for (int i = 0; i < obstacles.size(); i++)
+		{
+			obstacles[i].x -= 200;
+		}
+		for (int i = 0; i < wheels.size(); i++)
+		{
+			wheels[i].x -= 200;
+		}
+
+	}
+	else if (timeElapsed == (level1time + level2time+ level3time) && lives != 0)
+	{
 		stop = 0;
 		gameWon = true;
 		//exit(EXIT_SUCCESS);
-
 	}
 	//drawRain();
 
@@ -690,7 +745,9 @@ void LoadAssets()
 	palm_model.Load("Models/palmTree/palm.3DS");
 	house_model.Load("Models/House9/House/House.3DS");
 	tree_model.Load("Models/tree1/tree.3DS");
+	boat_model.Load("Models/yacht1/Boat.3DS");
 	box_model.Load("Models/waste/Bin Polymer trash bin BM-5000 N080818.3DS");
+
 
 	// Loading texture files
 	
